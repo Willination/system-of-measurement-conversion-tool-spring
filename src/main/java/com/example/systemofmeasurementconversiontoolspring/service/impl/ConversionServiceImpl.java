@@ -166,6 +166,9 @@ public class ConversionServiceImpl implements ConversionService {
         } else if ("Feet".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.3048);
         }
+        else if ("Inches".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 25.4);
+        }
         getRoundedValue(input);
     }
 
@@ -194,6 +197,9 @@ public class ConversionServiceImpl implements ConversionService {
             input.setToValue(input.getFromValue() * 453592);
         } else if ("US Short Tons".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 907185000);
+        }
+        else if ("Ounces".equals(input.getFromUnit()) && "Decigrams".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 28.3495);
         }
         getRoundedValue(input);
     }
