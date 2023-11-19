@@ -4,6 +4,9 @@ import com.example.systemofmeasurementconversiontoolspring.service.ConversionSer
 import com.example.systemofmeasurementconversiontoolspring.service.dto.ConversionModel;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Service
 public class ConversionServiceImpl implements ConversionService {
 
@@ -45,6 +48,7 @@ public class ConversionServiceImpl implements ConversionService {
         } else if ("Fahrenheit".equals(input.getFromUnit()) && "Kelvin".equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 32) * 5 / 9 + 273.15);
         }
+        getRoundedValue(input);
     }
 
     private void convertLengthMetricToImperial(ConversionModel input) {
@@ -75,6 +79,7 @@ public class ConversionServiceImpl implements ConversionService {
         } else if ("Millimeters".equals(input.getFromUnit()) && "Inches".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 25.4);
         }
+        getRoundedValue(input);
     }
 
     private void convertWeightMetricToImperial(ConversionModel input) {
@@ -103,6 +108,7 @@ public class ConversionServiceImpl implements ConversionService {
         else if ("Decigrams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.000220462);
         }
+        getRoundedValue(input);
     }
 
     private void convertTemperatureImperialToMetric(ConversionModel input) {
@@ -119,6 +125,7 @@ public class ConversionServiceImpl implements ConversionService {
         } else if ("Celsius".equals(input.getFromUnit()) && "Kelvin".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() + 273.15);
         }
+        getRoundedValue(input);
     }
 
     private void convertLengthImperialToMetric(ConversionModel input) {
@@ -155,6 +162,7 @@ public class ConversionServiceImpl implements ConversionService {
         } else if ("Feet".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.3048);
         }
+        getRoundedValue(input);
     }
 
     private void convertWeightImperialToMetric(ConversionModel input) {
@@ -180,5 +188,12 @@ public class ConversionServiceImpl implements ConversionService {
         else if ("Ounces".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 28349.5);
         }
+        getRoundedValue(input);
+    }
+
+    private void getRoundedValue(ConversionModel model)
+    {
+        BigDecimal roundedValue = BigDecimal.valueOf(model.getToValue()).setScale(5, RoundingMode.HALF_UP);
+        model.setToValue(roundedValue.doubleValue());
     }
 }
