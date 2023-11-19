@@ -169,6 +169,17 @@ public class ConversionServiceImpl implements ConversionService {
         else if ("Inches".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 25.4);
         }
+        else if ("Inches".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 0.0254);
+        } else if ("Inches".equals(input.getFromUnit()) && "Kilometers".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 2.54e-5);
+        }
+        else if ("Feet".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 304.8);
+        }
+        else if ("Yards".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 914.4);
+        }
         getRoundedValue(input);
     }
 
