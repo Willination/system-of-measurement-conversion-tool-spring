@@ -101,12 +101,16 @@ public class ConversionServiceImpl implements ConversionService {
             input.setToValue(input.getFromValue() * 35273.96);
         } else if ("Metric Tons".equals(input.getFromUnit()) && "US Short Tons".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.984207);
-        }
-        else if ("Grams".equals(input.getFromUnit()) && "Kilograms".equals(input.getToUnit())) {
+        } else if ("Grams".equals(input.getFromUnit()) && "Kilograms".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 1000);
-        }
-        else if ("Decigrams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+        } else if ("Decigrams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.000220462);
+        } else if ("Milligrams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 2.20462e-6);
+        } else if ("Milligrams".equals(input.getFromUnit()) && "Ounces".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 3.5274e-5);
+        } else if ("Milligrams".equals(input.getFromUnit()) && "US Short Tons".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 9.8421e-10);
         }
         getRoundedValue(input);
     }
@@ -184,9 +188,12 @@ public class ConversionServiceImpl implements ConversionService {
             input.setToValue(input.getFromValue() * 907185);
         } else if ("US Short Tons".equals(input.getFromUnit()) && "Metric Tons".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.907185);
-        }
-        else if ("Ounces".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
+        } else if ("Ounces".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 28349.5);
+        } else if ("Pounds".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 453592);
+        } else if ("US Short Tons".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
+            input.setToValue(input.getFromValue() * 907185000);
         }
         getRoundedValue(input);
     }
