@@ -1,19 +1,14 @@
 package com.example.systemofmeasurementconversiontoolspring.service.dto;
 
+import com.example.systemofmeasurementconversiontoolspring.service.measurement.ConversionType;
+
 public class ConversionModel {
-    private String conversionType;
+    private ConversionType conversionType;
+
     private String fromUnit;
     private String toUnit;
     private double fromValue;
     private double toValue;
-
-    public String getConversionType() {
-        return conversionType;
-    }
-
-    public void setConversionType(String conversionType) {
-        this.conversionType = conversionType;
-    }
 
     public String getFromUnit() {
         return fromUnit;
@@ -45,5 +40,13 @@ public class ConversionModel {
 
     public void setToValue(double toValue) {
         this.toValue = toValue;
+    }
+
+    public ConversionType getConversionType() {
+        return conversionType;
+    }
+
+    public void setConversionType(ConversionType conversionType) {
+        this.conversionType = conversionType;
     }
 }

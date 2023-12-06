@@ -2,6 +2,10 @@ package com.example.systemofmeasurementconversiontoolspring.service.impl;
 
 import com.example.systemofmeasurementconversiontoolspring.service.ConversionService;
 import com.example.systemofmeasurementconversiontoolspring.service.dto.ConversionModel;
+import com.example.systemofmeasurementconversiontoolspring.service.measurement.InvalidConversionException;
+import com.example.systemofmeasurementconversiontoolspring.service.measurement.LengthUnit;
+import com.example.systemofmeasurementconversiontoolspring.service.measurement.TemperatureUnit;
+import com.example.systemofmeasurementconversiontoolspring.service.measurement.WeightUnit;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,213 +16,219 @@ public class ConversionServiceImpl implements ConversionService {
 
     @Override
     public ConversionModel convertMetricToImperial(ConversionModel input) {
+        if (input.getConversionType() == null) {
+            throw new InvalidConversionException("Conversion type for Metric-to-Imperial  is null");
+        }
+
         switch (input.getConversionType()) {
-            case "Temperature" -> convertTemperatureMetricToImperial(input);
-            case "Length" -> convertLengthMetricToImperial(input);
-            case "Weight" -> convertWeightMetricToImperial(input);
-            default -> {
-            }
+            case TEMPERATURE -> convertTemperatureMetricToImperial(input);
+            case LENGTH -> convertLengthMetricToImperial(input);
+            case WEIGHT -> convertWeightMetricToImperial(input);
+            default ->
+                    throw new InvalidConversionException("Invalid conversion type: " + input.getConversionType());
         }
         return input;
+
+
     }
 
     @Override
     public ConversionModel convertImperialToMetric(ConversionModel input) {
+        if (input.getConversionType() == null) {
+            throw new InvalidConversionException("Conversion type for Imperial-to-Metric  is null");
+        }
+
         switch (input.getConversionType()) {
-            case "Temperature" -> convertTemperatureImperialToMetric(input);
-            case "Length" -> convertLengthImperialToMetric(input);
-            case "Weight" -> convertWeightImperialToMetric(input);
-            default -> {
-            }
+            case TEMPERATURE -> convertTemperatureImperialToMetric(input);
+            case LENGTH -> convertLengthImperialToMetric(input);
+            case WEIGHT -> convertWeightImperialToMetric(input);
+            default ->
+                    throw new InvalidConversionException("Invalid conversion type: " + input.getConversionType());
         }
         return input;
     }
 
     private void convertTemperatureMetricToImperial(ConversionModel input) {
-        if ("Celsius".equals(input.getFromUnit()) && "Fahrenheit".equals(input.getToUnit())) {
+        if (TemperatureUnit.CELSIUS.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() * 9 / 5) + 32);
-        } else if ("Celsius".equals(input.getFromUnit()) && "Kelvin".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.CELSIUS.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.KELVIN.getStringValue().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() + 273.15);
-        } else if ("Kelvin".equals(input.getFromUnit()) && "Celsius".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.KELVIN.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.CELSIUS.getStringValue().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() - 273.15);
-        } else if ("Kelvin".equals(input.getFromUnit()) && "Fahrenheit".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.KELVIN.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 273.15) * 9 / 5 + 32);
-        } else if ("Fahrenheit".equals(input.getFromUnit()) && "Celsius".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.CELSIUS.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 32) * 5 / 9);
-        } else if ("Fahrenheit".equals(input.getFromUnit()) && "Kelvin".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.KELVIN.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 32) * 5 / 9 + 273.15);
         }
         getRoundedValue(input);
     }
 
     private void convertLengthMetricToImperial(ConversionModel input) {
-        if ("Centimeters".equals(input.getFromUnit()) && "Inches".equals(input.getToUnit())) {
+        if (LengthUnit.CENTIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.INCHES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 2.54);
-        } else if ("Centimeters".equals(input.getFromUnit()) && "Feet".equals(input.getToUnit())) {
+        } else if (LengthUnit.CENTIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.FEET.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / (2.54 * 12));
-        } else if ("Centimeters".equals(input.getFromUnit()) && "Yards".equals(input.getToUnit())) {
+        } else if (LengthUnit.CENTIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.YARDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / (2.54 * 36));
-        } else if ("Centimeters".equals(input.getFromUnit()) && "Miles".equals(input.getToUnit())) {
+        } else if (LengthUnit.CENTIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.MILES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / (2.54 * 100000) * 0.621371);
-        } else if ("Meters".equals(input.getFromUnit()) && "Inches".equals(input.getToUnit())) {
+        } else if (LengthUnit.METERS.getString().equals(input.getFromUnit()) && LengthUnit.INCHES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 39.3701);
-        } else if ("Meters".equals(input.getFromUnit()) && "Feet".equals(input.getToUnit())) {
+        } else if (LengthUnit.METERS.getString().equals(input.getFromUnit()) && LengthUnit.FEET.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 3.28084);
-        } else if ("Meters".equals(input.getFromUnit()) && "Yards".equals(input.getToUnit())) {
+        } else if (LengthUnit.METERS.getString().equals(input.getFromUnit()) && LengthUnit.YARDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 1.09361);
-        } else if ("Meters".equals(input.getFromUnit()) && "Miles".equals(input.getToUnit())) {
+        } else if (LengthUnit.METERS.getString().equals(input.getFromUnit()) && LengthUnit.MILES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 1609.34);
-        } else if ("Kilometers".equals(input.getFromUnit()) && "Inches".equals(input.getToUnit())) {
+        } else if (LengthUnit.KILOMETERS.getString().equals(input.getFromUnit()) && LengthUnit.INCHES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 39370.1);
-        } else if ("Kilometers".equals(input.getFromUnit()) && "Feet".equals(input.getToUnit())) {
+        } else if (LengthUnit.KILOMETERS.getString().equals(input.getFromUnit()) && LengthUnit.FEET.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 3280.84);
-        } else if ("Kilometers".equals(input.getFromUnit()) && "Yards".equals(input.getToUnit())) {
+        } else if (LengthUnit.KILOMETERS.getString().equals(input.getFromUnit()) && LengthUnit.YARDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 1094);
-        } else if ("Kilometers".equals(input.getFromUnit()) && "Miles".equals(input.getToUnit())) {
+        } else if (LengthUnit.KILOMETERS.getString().equals(input.getFromUnit()) && LengthUnit.MILES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 1.60934);
-        } else if ("Millimeters".equals(input.getFromUnit()) && "Inches".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILLIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.INCHES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 25.4);
-        }
-        else if ("Millimeters".equals(input.getFromUnit()) && "Feet".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILLIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.FEET.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 304.8);
-        } else if ("Millimeters".equals(input.getFromUnit()) && "Yards".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILLIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.YARDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 914.4);
-        } else if ("Millimeters".equals(input.getFromUnit()) && "Miles".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILLIMETERS.getString().equals(input.getFromUnit()) && LengthUnit.MILES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 1609344.0);
         }
         getRoundedValue(input);
     }
 
     private void convertWeightMetricToImperial(ConversionModel input) {
-        if ("Kilograms".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+        if (WeightUnit.KILOGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.POUNDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.20462);
-        } else if ("Kilograms".equals(input.getFromUnit()) && "Ounces".equals(input.getToUnit())) {
+        } else if (WeightUnit.KILOGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.OUNCES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 35.27396);
-        } else if ("Kilograms".equals(input.getFromUnit()) && "US Short Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.KILOGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.US_SHORT_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.000984207);
-        } else if ("Grams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+        } else if (WeightUnit.GRAMS.getString().equals(input.getFromUnit()) && WeightUnit.POUNDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.00220462);
-        } else if ("Grams".equals(input.getFromUnit()) && "Ounces".equals(input.getToUnit())) {
+        } else if (WeightUnit.GRAMS.getString().equals(input.getFromUnit()) && WeightUnit.OUNCES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.03527396);
-        } else if ("Grams".equals(input.getFromUnit()) && "US Short Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.GRAMS.getString().equals(input.getFromUnit()) && WeightUnit.US_SHORT_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 1.10231e-6);
-        } else if ("Metric Tons".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+        } else if (WeightUnit.METRIC_TONS.getString().equals(input.getFromUnit()) && WeightUnit.POUNDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2204.62);
-        } else if ("Metric Tons".equals(input.getFromUnit()) && "Ounces".equals(input.getToUnit())) {
+        } else if (WeightUnit.METRIC_TONS.getString().equals(input.getFromUnit()) && WeightUnit.OUNCES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 35273.96);
-        } else if ("Metric Tons".equals(input.getFromUnit()) && "US Short Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.METRIC_TONS.getString().equals(input.getFromUnit()) && WeightUnit.US_SHORT_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.984207);
-        } else if ("Grams".equals(input.getFromUnit()) && "Kilograms".equals(input.getToUnit())) {
+        } else if (WeightUnit.GRAMS.getString().equals(input.getFromUnit()) && WeightUnit.KILOGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 1000);
-        } else if ("Decigrams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+        } else if (WeightUnit.DECIGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.POUNDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.000220462);
-        } else if ("Milligrams".equals(input.getFromUnit()) && "Pounds".equals(input.getToUnit())) {
+        } else if (WeightUnit.MILLIGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.POUNDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.20462e-6);
-        } else if ("Milligrams".equals(input.getFromUnit()) && "Ounces".equals(input.getToUnit())) {
+        } else if (WeightUnit.MILLIGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.OUNCES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 3.5274e-5);
-        } else if ("Milligrams".equals(input.getFromUnit()) && "US Short Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.MILLIGRAMS.getString().equals(input.getFromUnit()) && WeightUnit.US_SHORT_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 9.8421e-10);
         }
         getRoundedValue(input);
     }
 
     private void convertTemperatureImperialToMetric(ConversionModel input) {
-        if ("Fahrenheit".equals(input.getFromUnit()) && "Celsius".equals(input.getToUnit())) {
+        if (TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.CELSIUS.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 32) * 5 / 9);
-        } else if ("Fahrenheit".equals(input.getFromUnit()) && "Kelvin".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.KELVIN.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 32) * 5 / 9 + 273.15);
-        } else if ("Kelvin".equals(input.getFromUnit()) && "Celsius".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.KELVIN.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.CELSIUS.getStringValue().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() - 273.15);
-        } else if ("Kelvin".equals(input.getFromUnit()) && "Fahrenheit".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.KELVIN.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() - 273.15) * 9 / 5 + 32);
-        } else if ("Celsius".equals(input.getFromUnit()) && "Fahrenheit".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.CELSIUS.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.FAHRENHEIT.getStringValue().equals(input.getToUnit())) {
             input.setToValue((input.getFromValue() * 9 / 5) + 32);
-        } else if ("Celsius".equals(input.getFromUnit()) && "Kelvin".equals(input.getToUnit())) {
+        } else if (TemperatureUnit.CELSIUS.getStringValue().equals(input.getFromUnit()) && TemperatureUnit.KELVIN.getStringValue().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() + 273.15);
         }
         getRoundedValue(input);
     }
 
     private void convertLengthImperialToMetric(ConversionModel input) {
-        if ("Inches".equals(input.getFromUnit()) && "Centimeters".equals(input.getToUnit())) {
+        if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.CENTIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.54);
-        } else if ("Inches".equals(input.getFromUnit()) && "Feet".equals(input.getToUnit())) {
+        } else if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.FEET.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.0833333);
-        } else if ("Inches".equals(input.getFromUnit()) && "Yards".equals(input.getToUnit())) {
+        } else if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.YARDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.0277778);
-        } else if ("Inches".equals(input.getFromUnit()) && "Miles".equals(input.getToUnit())) {
+        } else if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.MILES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.54 / 100000 / 0.000621371);
-        } else if ("Feet".equals(input.getFromUnit()) && "Centimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.FEET.getString().equals(input.getFromUnit()) && LengthUnit.CENTIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 30.48);
-        } else if ("Feet".equals(input.getFromUnit()) && "Yards".equals(input.getToUnit())) {
+        } else if (LengthUnit.FEET.getString().equals(input.getFromUnit()) && LengthUnit.YARDS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() / 3);
-        } else if ("Feet".equals(input.getFromUnit()) && "Miles".equals(input.getToUnit())) {
+        } else if (LengthUnit.FEET.getString().equals(input.getFromUnit()) && LengthUnit.MILES.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.54 / 100000 / 0.000621371 / 5280);
-        } else if ("Yards".equals(input.getFromUnit()) && "Centimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.YARDS.getString().equals(input.getFromUnit()) && LengthUnit.CENTIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 91.44);
-        } else if ("Yards".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
+        } else if (LengthUnit.YARDS.getString().equals(input.getFromUnit()) && LengthUnit.METERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.9144);
-        } else if ("Yards".equals(input.getFromUnit()) && "Kilometers".equals(input.getToUnit())) {
+        } else if (LengthUnit.YARDS.getString().equals(input.getFromUnit()) && LengthUnit.KILOMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.0009144);
-        } else if ("Miles".equals(input.getFromUnit()) && "Centimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILES.getString().equals(input.getFromUnit()) && LengthUnit.CENTIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 160934.0);
-        } else if ("Miles".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILES.getString().equals(input.getFromUnit()) && LengthUnit.METERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 1609.34);
-        } else if ("Miles".equals(input.getFromUnit()) && "Kilometers".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILES.getString().equals(input.getFromUnit()) && LengthUnit.KILOMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 1.60934);
-        } else if ("Miles".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.MILES.getString().equals(input.getFromUnit()) && LengthUnit.MILLIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 1609340.0);
-        } else if ("Feet".equals(input.getFromUnit()) && "Kilometers".equals(input.getToUnit())) {
+        } else if (LengthUnit.FEET.getString().equals(input.getFromUnit()) && LengthUnit.KILOMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.0003048);
-        } else if ("Feet".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
+        } else if (LengthUnit.FEET.getString().equals(input.getFromUnit()) && LengthUnit.METERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.3048);
-        }
-        else if ("Inches".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.MILLIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 25.4);
-        }
-        else if ("Inches".equals(input.getFromUnit()) && "Meters".equals(input.getToUnit())) {
+        } else if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.METERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.0254);
-        } else if ("Inches".equals(input.getFromUnit()) && "Kilometers".equals(input.getToUnit())) {
+        } else if (LengthUnit.INCHES.getString().equals(input.getFromUnit()) && LengthUnit.KILOMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.54e-5);
-        }
-        else if ("Feet".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.FEET.getString().equals(input.getFromUnit()) && LengthUnit.MILLIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 304.8);
-        }
-        else if ("Yards".equals(input.getFromUnit()) && "Millimeters".equals(input.getToUnit())) {
+        } else if (LengthUnit.YARDS.getString().equals(input.getFromUnit()) && LengthUnit.MILLIMETERS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 914.4);
         }
+
         getRoundedValue(input);
     }
 
     private void convertWeightImperialToMetric(ConversionModel input) {
-        if ("Pounds".equals(input.getFromUnit()) && "Kilograms".equals(input.getToUnit())) {
+        if (WeightUnit.POUNDS.getString().equals(input.getFromUnit()) && WeightUnit.KILOGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.453592);
-        } else if ("Pounds".equals(input.getFromUnit()) && "Grams".equals(input.getToUnit())) {
+        } else if (WeightUnit.POUNDS.getString().equals(input.getFromUnit()) && WeightUnit.GRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 453.592);
-        } else if ("Pounds".equals(input.getFromUnit()) && "Metric Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.POUNDS.getString().equals(input.getFromUnit()) && WeightUnit.METRIC_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.000453592);
-        } else if ("Ounces".equals(input.getFromUnit()) && "Kilograms".equals(input.getToUnit())) {
+        } else if (WeightUnit.OUNCES.getString().equals(input.getFromUnit()) && WeightUnit.KILOGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.0283495);
-        } else if ("Ounces".equals(input.getFromUnit()) && "Grams".equals(input.getToUnit())) {
+        } else if (WeightUnit.OUNCES.getString().equals(input.getFromUnit()) && WeightUnit.GRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 28.3495);
-        } else if ("Ounces".equals(input.getFromUnit()) && "Metric Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.OUNCES.getString().equals(input.getFromUnit()) && WeightUnit.METRIC_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 2.83495e-5);
-        } else if ("US Short Tons".equals(input.getFromUnit()) && "Kilograms".equals(input.getToUnit())) {
+        } else if (WeightUnit.US_SHORT_TONS.getString().equals(input.getFromUnit()) && WeightUnit.KILOGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 907.185);
-        } else if ("US Short Tons".equals(input.getFromUnit()) && "Grams".equals(input.getToUnit())) {
+        } else if (WeightUnit.US_SHORT_TONS.getString().equals(input.getFromUnit()) && WeightUnit.GRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 907185);
-        } else if ("US Short Tons".equals(input.getFromUnit()) && "Metric Tons".equals(input.getToUnit())) {
+        } else if (WeightUnit.US_SHORT_TONS.getString().equals(input.getFromUnit()) && WeightUnit.METRIC_TONS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 0.907185);
-        } else if ("Ounces".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
+        } else if (WeightUnit.OUNCES.getString().equals(input.getFromUnit()) && WeightUnit.MILLIGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 28349.5);
-        } else if ("Pounds".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
+        } else if (WeightUnit.POUNDS.getString().equals(input.getFromUnit()) && WeightUnit.MILLIGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 453592);
-        } else if ("US Short Tons".equals(input.getFromUnit()) && "Milligrams".equals(input.getToUnit())) {
+        } else if (WeightUnit.US_SHORT_TONS.getString().equals(input.getFromUnit()) && WeightUnit.MILLIGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 907185000);
-        }
-        else if ("Ounces".equals(input.getFromUnit()) && "Decigrams".equals(input.getToUnit())) {
+        } else if (WeightUnit.OUNCES.getString().equals(input.getFromUnit()) && WeightUnit.DECIGRAMS.getString().equals(input.getToUnit())) {
             input.setToValue(input.getFromValue() * 28.3495);
         }
+
         getRoundedValue(input);
     }
 
