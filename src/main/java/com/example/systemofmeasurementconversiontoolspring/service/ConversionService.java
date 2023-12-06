@@ -1,6 +1,6 @@
 package com.example.systemofmeasurementconversiontoolspring.service;
 
-import com.example.systemofmeasurementconversiontoolspring.service.dto.ConversionModel;
+import com.example.systemofmeasurementconversiontoolspring.model.ConversionModel;
 
 public interface ConversionService {
     ConversionModel convertMetricToImperial(ConversionModel input);

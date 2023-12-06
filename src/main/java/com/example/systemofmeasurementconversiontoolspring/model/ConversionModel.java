@@ -1,6 +1,6 @@
-package com.example.systemofmeasurementconversiontoolspring.service.dto;
+package com.example.systemofmeasurementconversiontoolspring.model;
 
-import com.example.systemofmeasurementconversiontoolspring.service.measurement.ConversionType;
+import com.example.systemofmeasurementconversiontoolspring.measurement.ConversionType;
 
 public class ConversionModel {
     private ConversionType conversionType;

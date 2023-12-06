@@ -1,11 +1,11 @@
 package com.example.systemofmeasurementconversiontoolspring.service.impl;
 
 import com.example.systemofmeasurementconversiontoolspring.service.ConversionService;
-import com.example.systemofmeasurementconversiontoolspring.service.dto.ConversionModel;
-import com.example.systemofmeasurementconversiontoolspring.service.measurement.InvalidConversionException;
-import com.example.systemofmeasurementconversiontoolspring.service.measurement.LengthUnit;
-import com.example.systemofmeasurementconversiontoolspring.service.measurement.TemperatureUnit;
-import com.example.systemofmeasurementconversiontoolspring.service.measurement.WeightUnit;
+import com.example.systemofmeasurementconversiontoolspring.model.ConversionModel;
+import com.example.systemofmeasurementconversiontoolspring.measurement.InvalidConversionException;
+import com.example.systemofmeasurementconversiontoolspring.measurement.LengthUnit;
+import com.example.systemofmeasurementconversiontoolspring.measurement.TemperatureUnit;
+import com.example.systemofmeasurementconversiontoolspring.measurement.WeightUnit;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

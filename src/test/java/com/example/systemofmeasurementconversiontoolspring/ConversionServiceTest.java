@@ -1,6 +1,6 @@
 package com.example.systemofmeasurementconversiontoolspring;
 
-import com.example.systemofmeasurementconversiontoolspring.service.dto.ConversionModel;
+import com.example.systemofmeasurementconversiontoolspring.model.ConversionModel;
 import com.example.systemofmeasurementconversiontoolspring.service.impl.ConversionServiceImpl;
 import org.junit.Test;
 

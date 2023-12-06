@@ -1,4 +1,4 @@
-package com.example.systemofmeasurementconversiontoolspring.service.measurement;
+package com.example.systemofmeasurementconversiontoolspring.measurement;
 
 public enum WeightUnit {
     KILOGRAMS("Kilograms"),

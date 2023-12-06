@@ -1,4 +1,4 @@
-package com.example.systemofmeasurementconversiontoolspring.service.measurement;
+package com.example.systemofmeasurementconversiontoolspring.measurement;
 
 public class InvalidConversionException extends RuntimeException {
     public InvalidConversionException(String message) {
